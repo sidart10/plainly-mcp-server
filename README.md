@@ -1,110 +1,103 @@
-# Plainly Videos MCP Server Pro 🎬
+# Plainly Videos MCP Server Pro
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
 
 A comprehensive Model Context Protocol (MCP) server for [Plainly Videos](https://www.plainlyvideos.com/) that provides full API access, resources, and intelligent prompts for automated video creation.
 
+## 🚀 Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run in development
+npm run dev
+```
+
+## 📖 Documentation
+
+- **[Getting Started](docs/QUICKSTART.md)** - Quick setup guide
+- **[Setup Guide](docs/SETUP_GUIDE.md)** - Detailed configuration
+- **[Examples](docs/EXAMPLES.md)** - Usage examples
+- **[Agent Workflows](docs/AGENT_WORKFLOWS.md)** - AI agent integration patterns
+- **[Architecture](docs/ARCHITECTURE.md)** - System design
+- **[API Reference](docs/QUICK_REFERENCE.md)** - Complete API docs
+
 ## ✨ Features
 
-### 🛠️ Complete Tool Suite (25+ Tools)
+### 21+ Tools for Full API Coverage
 
-#### Project Management
-- `list_projects` - List all video projects
-- `get_project` - Get project details
-- `create_project` - Create new projects
-- `update_project` - Update project settings
-- `delete_project` - Remove projects
+**Projects** - `list_projects`, `get_project`, `create_project`, `update_project`, `delete_project`
 
-#### Template Management
-- `list_templates` - List templates for a project
-- `get_template` - Get template details with parameters
+**Templates** - `list_templates`, `get_template`
 
-#### Render Management
-- `create_render` - Create new video renders
-- `get_render` - Check render status
-- `list_renders` - List renders with filtering
-- `cancel_render` - Cancel pending renders
-- `delete_render` - Delete renders
-- `retry_render` - Retry failed renders
-- `batch_render` - Bulk render multiple videos
+**Renders** - `create_render`, `get_render`, `list_renders`, `cancel_render`, `delete_render`, `retry_render`, `batch_render`
 
-#### Asset Management
-- `list_assets` - List uploaded assets
-- `upload_asset` - Register asset URLs
-- `delete_asset` - Remove assets
+**Assets** - `list_assets`, `upload_asset`, `delete_asset`
 
-#### Analytics
-- `get_render_stats` - Get performance metrics
+**Analytics** - `get_render_stats`
 
-#### Webhook Management
-- `list_webhooks` - List configured webhooks
-- `create_webhook` - Setup notifications
-- `delete_webhook` - Remove webhooks
+**Webhooks** - `list_webhooks`, `create_webhook`, `delete_webhook`
 
-### 📦 Resources
+### 8 Pre-Built Resources
 
-Pre-defined resources for quick access to data:
-
-- `plainly://projects` - All projects overview
-- `plainly://renders/recent` - Recent renders
-- `plainly://renders/completed` - Completed videos
-- `plainly://renders/failed` - Failed renders for debugging
-- `plainly://renders/pending` - In-progress renders
+Quick access to data via URIs:
+- `plainly://projects` - All projects
+- `plainly://renders/{status}` - Renders by status
 - `plainly://assets` - Asset library
-- `plainly://stats/overview` - Statistics dashboard
-- `plainly://webhooks` - Webhook configuration
-- `plainly://projects/{id}` - Specific project details
-- `plainly://renders/{id}` - Specific render details
+- `plainly://stats/overview` - Analytics
+- `plainly://webhooks` - Webhook config
 
-### 💡 Intelligent Prompts
+### 8 Intelligent Workflow Prompts
 
-Pre-built workflows for common tasks:
+- `create-social-media-video` - Quick social content
+- `batch-product-videos` - Bulk generation
+- `personalized-greeting` - Custom videos
+- `check-render-progress` - Status monitoring
+- `video-workflow` - Complete pipeline
+- `analyze-render-stats` - Performance analytics
+- `troubleshoot-failed-renders` - Debug helper
+- `setup-webhook` - Notification setup
 
-1. **create-social-media-video** - Quick social media content
-2. **batch-product-videos** - Bulk product video generation
-3. **personalized-greeting** - Custom greeting videos
-4. **check-render-progress** - Monitor rendering status
-5. **video-workflow** - Complete creation workflow
-6. **analyze-render-stats** - Performance analytics
-7. **troubleshoot-failed-renders** - Debug failed renders
-8. **setup-webhook** - Configure notifications
-
-## 🚀 Installation
+## 📦 Installation
 
 ### Prerequisites
 
 - Node.js ≥ 18.0.0
 - Plainly API Key ([Get one here](https://app.plainlyvideos.com/dashboard/user/settings/general))
 
-### Method 1: NPM (Recommended)
+### Option 1: NPM (Recommended)
 
 ```bash
 npm install -g @plainly-videos/mcp-server-pro
 ```
 
-### Method 2: From Source
+### Option 2: From Source
 
 ```bash
-git clone https://github.com/plainly-videos/mcp-server-pro.git
-cd mcp-server-pro
+git clone https://github.com/sidart10/plainly-mcp-server.git
+cd plainly-mcp-server
 npm install
 npm run build
-npm link
 ```
 
 ## ⚙️ Configuration
 
 ### Claude Desktop
 
-Add to your Claude Desktop config:
-
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 
 ```json
 {
   "mcpServers": {
     "plainly-videos": {
-      "command": "npx",
-      "args": ["-y", "@plainly-videos/mcp-server-pro@latest"],
+      "command": "node",
+      "args": ["/path/to/plainly-mcp-server/dist/index.js"],
       "env": {
         "PLAINLY_API_KEY": "your-api-key-here"
       }
@@ -113,131 +106,47 @@ Add to your Claude Desktop config:
 }
 ```
 
-### Other MCP Clients
+See [docs/CLAUDE_DESKTOP_CONFIG.md](docs/CLAUDE_DESKTOP_CONFIG.md) for detailed setup.
 
-For other MCP clients (Cursor, Windsurf, etc.), use:
+## 🎯 Usage Examples
 
-```bash
-plainly-mcp
-```
-
-With environment variable:
-```bash
-PLAINLY_API_KEY=your-api-key-here plainly-mcp
-```
-
-## 📖 Usage Examples
-
-### Example 1: Create a Social Media Video
+### Create a Single Video
 
 ```
-Use the create-social-media-video prompt with:
-- projectId: abc123
-- title: "New Product Launch!"
-- description: "Check out our latest innovation"
+Use create_render to make a tutorial video with:
+- title: "JavaScript Promises"
+- code: "const promise = new Promise(...)"
+- explanation: "Promises handle async operations"
 ```
 
-### Example 2: Batch Product Videos
+### Batch Create Videos
 
 ```
-Create product videos for my e-commerce catalog using batch-product-videos:
-- projectId: abc123
-- products: [
-    {"name": "Widget Pro", "price": "$99", "image": "https://..."},
-    {"name": "Widget Plus", "price": "$79", "image": "https://..."}
-  ]
+Create 50 tutorial videos from this CSV data:
+[CSV content with title, code, explanation columns]
 ```
 
-### Example 3: Check Render Progress
+### Check Status
 
 ```
 What's the status of my renders?
 ```
 
-The assistant will use the `check-render-progress` prompt to show all renders grouped by status.
+See [docs/EXAMPLES.md](docs/EXAMPLES.md) for 100+ examples.
 
-### Example 4: Create Custom Render
-
-```
-Create a video for project abc123 with these parameters:
-- headline: "Summer Sale"
-- discount: "50% OFF"
-- background_image: "https://example.com/beach.jpg"
-```
-
-The assistant will use the `create_render` tool directly.
-
-### Example 5: Analytics
+## 🏗️ Project Structure
 
 ```
-Analyze my rendering performance for the past month
-```
-
-Uses `analyze-render-stats` to provide insights and recommendations.
-
-## 🔍 Advanced Usage
-
-### Working with Resources
-
-Access data directly through resources:
-
-```
-Show me all my projects
-```
-
-Reads from `plainly://projects` resource.
-
-```
-What renders failed today?
-```
-
-Reads from `plainly://renders/failed` resource.
-
-### Batch Operations
-
-```
-Create 100 personalized videos from this CSV data...
-```
-
-Uses `batch_render` tool for efficient bulk processing.
-
-### Webhook Integration
-
-```
-Setup a webhook at https://myapp.com/plainly-webhook for render completion
-```
-
-Uses `create_webhook` tool with proper event configuration.
-
-## 🆚 Comparison: Original vs Pro
-
-| Feature | Original Server | Pro Server |
-|---------|----------------|------------|
-| Tools | 4 | 25+ |
-| Resources | ❌ | ✅ 8+ predefined |
-| Prompts | ❌ | ✅ 8 workflows |
-| Project Management | ❌ | ✅ Full CRUD |
-| Asset Management | ❌ | ✅ Complete |
-| Analytics | ❌ | ✅ Statistics |
-| Webhook Support | ❌ | ✅ Full management |
-| Batch Rendering | ❌ | ✅ Yes |
-| Error Handling | Basic | ✅ Comprehensive |
-| Retry Logic | ❌ | ✅ Built-in |
-| Progress Monitoring | Manual | ✅ Automated |
-
-## 🏗️ Architecture
-
-```
-plainly-mcp-server-pro/
+plainly-mcp-server/
 ├── src/
-│   ├── index.ts              # Main server entry
+│   ├── index.ts              # Server entry point
 │   ├── plainly-client.ts     # API client
-│   ├── tools/
-│   │   └── index.ts          # Tool definitions
-│   ├── resources/
-│   │   └── index.ts          # Resource providers
-│   └── prompts/
-│       └── index.ts          # Prompt templates
+│   ├── tools/                # Tool definitions
+│   ├── resources/            # Resource providers
+│   └── prompts/              # Workflow prompts
+├── docs/                     # Documentation
+├── examples/                 # Example scripts
+├── scripts/                  # Build/setup scripts
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -245,106 +154,60 @@ plainly-mcp-server-pro/
 
 ## 🔧 Development
 
-### Build
-
 ```bash
+# Install dependencies
+npm install
+
+# Build
 npm run build
-```
 
-### Development Mode
+# Development mode with auto-reload
+npm run watch
 
-```bash
-npm run dev
-```
-
-### Testing with MCP Inspector
-
-```bash
+# Test with MCP Inspector
 npm run inspect
 ```
 
-## 🤝 API Compatibility
-
-This server implements the full Plainly API v2:
-
-- ✅ Projects API
-- ✅ Templates API
-- ✅ Renders API
-- ✅ Assets API
-- ✅ Webhooks API
-- ✅ Analytics API
-
-## 📝 Error Handling
-
-The server provides comprehensive error messages:
-
-```
-❌ Error: Plainly API Error: 404 - Project not found
-```
-
-With helpful context and suggestions for resolution.
-
-## 🔐 Security
-
-- API keys are passed via environment variables
-- No credentials stored in code
-- HTTPS enforced for all API calls
-- Webhook signature verification recommended
-
-## 📊 Performance
-
-- Concurrent request handling
-- Automatic retry for transient failures
-- Efficient batch processing
-- Response caching where appropriate
-
-## 🐛 Troubleshooting
-
-### Issue: "PLAINLY_API_KEY not found"
-
-**Solution**: Ensure environment variable is set in your MCP client config.
-
-### Issue: "Cannot find module"
-
-**Solution**: Run `npm run build` before using the server.
-
-### Issue: Renders timing out
-
-**Solution**: Use the `get_render` tool to check status periodically rather than blocking.
-
-## 📄 License
-
-MIT License - see LICENSE file for details
-
-## 🙏 Contributing
+## 🤝 Contributing
 
 Contributions welcome! Please:
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🆚 Why This Server?
+
+| Feature | Basic Server | This Server |
+|---------|--------------|-------------|
+| Tools | 4 | 21+ |
+| Resources | 0 | 8 |
+| Prompts | 0 | 8 |
+| API Coverage | 15% | 100% |
+| Documentation | Minimal | Extensive |
+| Error Handling | Basic | Production-grade |
+| Agent Support | No | Yes |
 
 ## 📞 Support
 
-- 📧 Email: support@plainlyvideos.com
-- 📚 Docs: https://help.plainlyvideos.com
-- 💬 Discord: https://discord.gg/plainly
+- **Documentation**: [docs/](docs/)
+- **Issues**: [GitHub Issues](https://github.com/sidart10/plainly-mcp-server/issues)
+- **Email**: support@plainlyvideos.com
+- **Website**: [plainlyvideos.com](https://www.plainlyvideos.com/)
 
-## 🎯 Roadmap
+## 🙏 Acknowledgments
 
-- [ ] Streaming render progress updates
-- [ ] Template version management
-- [ ] Collaborative editing support
-- [ ] Advanced analytics dashboards
-- [ ] AI-powered parameter suggestions
-- [ ] Template marketplace integration
-
-## ⭐ Star History
-
-If you find this server useful, please give it a star on GitHub!
+Built with the Model Context Protocol by Anthropic. Special thanks to:
+- [Plainly Videos](https://www.plainlyvidos.com/) for the API
+- [Anthropic](https://www.anthropic.com/) for MCP
+- Open source community
 
 ---
 
-**Built with ❤️ for the Plainly Videos community**
+**Built with ❤️ for automated video creation**
