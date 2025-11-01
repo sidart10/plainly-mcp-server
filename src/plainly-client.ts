@@ -140,12 +140,11 @@ export class PlainlyClient {
     description?: string;
     metadata?: Record<string, any>;
   }): Promise<PlainlyProject> {
-    try {
-      const response = await this.client.post("/projects", data);
-      return response.data;
-    } catch (error) {
-      return this.handleError(error);
-    }
+    throw new Error(
+      "Creating projects via API is not supported by Plainly. " +
+      "Please create projects through the Plainly dashboard at https://app.plainlyvideos.com. " +
+      "Once created, you can use list_projects to get the project ID and then use all other tools."
+    );
   }
 
   /**
@@ -159,23 +158,20 @@ export class PlainlyClient {
       metadata?: Record<string, any>;
     }
   ): Promise<PlainlyProject> {
-    try {
-      const response = await this.client.patch(`/projects/${projectId}`, data);
-      return response.data;
-    } catch (error) {
-      return this.handleError(error);
-    }
+    throw new Error(
+      "Updating projects via API is not supported by Plainly. " +
+      "Please update projects through the Plainly dashboard at https://app.plainlyvideos.com."
+    );
   }
 
   /**
    * Delete a project
    */
   async deleteProject(projectId: string): Promise<void> {
-    try {
-      await this.client.delete(`/projects/${projectId}`);
-    } catch (error) {
-      return this.handleError(error);
-    }
+    throw new Error(
+      "Deleting projects via API is not supported by Plainly. " +
+      "Please delete projects through the Plainly dashboard at https://app.plainlyvideos.com."
+    );
   }
 
   // ===== TEMPLATE MANAGEMENT =====
@@ -368,13 +364,32 @@ export class PlainlyClient {
     endDate?: string;
   }): Promise<RenderStats> {
     try {
-      const params = new URLSearchParams();
-      if (options?.projectId) params.append("projectId", options.projectId);
-      if (options?.startDate) params.append("startDate", options.startDate);
-      if (options?.endDate) params.append("endDate", options.endDate);
-
-      const response = await this.client.get(`/stats/renders?${params.toString()}`);
-      return response.data;
+      // Stats endpoint doesn't exist in API v2, calculate from renders list
+      const renders = await this.listRenders(options);
+      
+      const stats: RenderStats = {
+        totalRenders: renders.length,
+        completedRenders: renders.filter(r => r.status === 'completed').length,
+        failedRenders: renders.filter(r => r.status === 'failed').length,
+        pendingRenders: renders.filter(r => r.status === 'pending' || r.status === 'processing').length,
+        totalDuration: 0,
+        averageDuration: 0
+      };
+      
+      // Calculate durations if available
+      const completedWithDuration = renders.filter(r => 
+        r.status === 'completed' && r.createdAt && r.completedAt
+      );
+      
+      if (completedWithDuration.length > 0) {
+        stats.totalDuration = completedWithDuration.reduce((sum, r) => {
+          const duration = new Date(r.completedAt!).getTime() - new Date(r.createdAt).getTime();
+          return sum + duration;
+        }, 0);
+        stats.averageDuration = stats.totalDuration / completedWithDuration.length;
+      }
+      
+      return stats;
     } catch (error) {
       return this.handleError(error);
     }
