@@ -1,0 +1,41 @@
+{
+  "name": "@plainly-videos/mcp-server-pro",
+  "version": "2.0.0",
+  "description": "Comprehensive Model Context Protocol server for Plainly Videos with full API support, resources, and prompts",
+  "type": "module",
+  "bin": {
+    "plainly-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsx src/index.ts",
+    "watch": "tsx watch src/index.ts",
+    "inspect": "npx @modelcontextprotocol/inspector dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "plainly",
+    "video-automation",
+    "after-effects",
+    "video-api"
+  ],
+  "author": "Plainly Videos",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "axios": "^1.7.9",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
